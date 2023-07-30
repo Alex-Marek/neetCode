@@ -1,1 +1,1 @@
-NeetCode Solutions
+NeetCode Solution(s)
