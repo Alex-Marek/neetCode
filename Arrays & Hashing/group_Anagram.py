@@ -1,42 +1,31 @@
-#Loop through the list of potential anagrams checking each word against each entry
+#My solution was too slow so I had to check the video solution posted on the site.
+#This solution works by creating a hashmap/dictionary to solve the problem
+#You need to make a dictionary hold the resulting group of anagrams
+#It was decided to use a defaultdictionary because when you supply them with a type the key will default to a
+#Blank of that type. So in our case a blank list []
 
-def isAnagram(s: str, t: str) -> bool:
-        if len(s) != len(t):
-              return False
-        o_Word = {}
-        for letter in s:
-            if letter in o_Word:
-                  o_Word[letter] += 1
-            else:
-                  o_Word[letter] = 1
-        for letter in t:
-            if letter in o_Word:
-                  o_Word[letter] -= 1
-        for value in o_Word:
-              if o_Word[value] > 0:
-                    return False
-        return True
+#From there when you are running through the letters of each word use the fact ascii letters are ordered sequentially to
+#Decide a place for them in the array, all you have to do is subtract the lowest ascii character from each one and they
+#Will go into their own unique bins (0-26) (because there are 26 letters)
+ 
+#Because of the way anagrams work every possible anagram should have the same array here because all we're doing is 
+#Counting letters. Python specifically doesn't like arrays to be keys (because they are mutable) for dictionaries
+#So we have to cast it as a tuple, which is fine in our case since we won't need to change them after this
+#From here we just append our word and pass in the array as our key. Any words that happen to have the same key will 
+#Naturally get grouped together in this format.
 
-
+#Due to the fact we don't care about sending the array with the key of letters back we'll only return the values
+from collections import defaultdict
 def groupAnagrams(strs: list[str]) -> list[list[str]]:
-    big_List = []
-    o_Strs = strs.copy()   #Creating a copy that won't remove any values for it to loop through
-    for p_Index in range(len(o_Strs)):
-            p_Anagram = o_Strs[p_Index]
-            if p_Anagram not in strs:
-                 continue
-            else:                    
-                temp_List = []
-                temp_List.append(p_Anagram)
-                strs.remove(p_Anagram)
-                for c_Index in range(len(o_Strs)):
-                    c_Anagram = o_Strs[c_Index]
-                    if c_Anagram in strs:
-                        if isAnagram(p_Anagram,c_Anagram):
-                            temp_List.append(c_Anagram)
-                            strs.remove(c_Anagram)
-            big_List.append(temp_List)
-    return big_List
+    res = defaultdict(list)
+
+    for string in strs:
+        count = [0] * 26
+
+        for character in string:
+            count[(ord(character) - ord("a"))] += 1
+        res[tuple(count)].append(string)
+    return res.values()
                         
           
 
