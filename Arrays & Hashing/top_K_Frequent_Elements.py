@@ -1,5 +1,5 @@
-#45 Minutes
-#105ms (Beats 92.79%) / 21mb (Beats 75.81%)
+# 45 Minutes
+# 105ms (Beats 92.79%) / 21mb (Beats 75.81%)
 # Works by using a hashmap where the key is the unique value and the value is the amount of times in the list the unique
 # value appeared. 
 

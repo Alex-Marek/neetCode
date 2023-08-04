@@ -1,4 +1,4 @@
-#Solution from Leetcode video people
+# Solution from Leetcode video people
 # This problem can be divided into two steps for maximal efficiency
 # The first step is to get a prefix multiplier, this will be the result of multiplying every number before the num in question
 # The second step is to get the postfix multiplier, this is the result of multiplying every num after the num in question

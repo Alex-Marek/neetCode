@@ -1,5 +1,5 @@
-#431ms (Beats 42%) / 17mb (Beats 60%)
-#Subtracts every number from every other number in the last and checks if they equal the target value if they do return
+# 431ms (Beats 42%) / 17mb (Beats 60%)
+# Subtracts every number from every other number in the last and checks if they equal the target value if they do return
 def twoSum(nums: list[int], target: int) -> list[int]:
         solNum = 0
         sol = []
