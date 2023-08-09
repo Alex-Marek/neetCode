@@ -1,64 +1,50 @@
-# Can confirm that there is an answer with a simple and operation
-# Once I know there is an answer then we have to figure out how to get it
-# Otherwise return false
-
-# To get it we should assume there is a valid character at the starting and the ending point 
-# Find the closest valid character to the start and end of the string and then check if the string is valid
-# if it is valid then we have to try and find a smaller one inside of that string
-# If we want to check if there's a smaller one inside decrement the right most pointer first
-# if there is still one keep doing that until there isn't then store that value
-# After that do the same thing with the left one 
-# do a min of both of those values for the resolution
-def checkIfHasSubstring(count1 = [], count2 = []):
-    count3 = [0] * 56
-    num = 0
-    for x,y in zip(count1,count2):
-        if x >= 1 and y >= 1 and x >= y:
-            count3[num] = count2[num]
-        else:
-            count3[num] = 0
-        num += 1
-    if count3 != count2:
-        return False
-    else:
-        return True
-
-
+# Wasn't able to solve by myself
+# This program creates two dictionaries, one of the key letters in the substring word and their amounts, and another for the
+# letters that are found in the current window stored with their amounts
+# Until it finds all the letters needed in their appropriate amounts it will continue moving the right pointer 
+# Once it has found all the letters in their correct amounts it stores the length and indexes of substring
+# After this it begins moving the left pointer forward until the requirement is not met anymore if it successfully
+# moves the left pointer and still meets requirements it will of course store the length and index of the substring
+# Once the requirement isn't met again it will begin incrementing the right pointer again until it finds another time where 
+# the requirement is met at which point it will start moving the left pointer again until we are at the end of the array
+# At which pointer it sets l and r to the resolution and returns that value assuming the length isn't infinity which'd return ""
 
 def minWindow(s: str, t: str) -> str:
-    if t == s:
-        return t
-    res = 100000
-    validChars = []
-    l,r = 0, 0
-    s_Count = [0] * 56
-    t_Count = [0] * 56
-    for value in s:
-        s_Count[(ord(value) - ord("A"))] += 1
-    for value in t:
-        if value not in validChars:
-            validChars.append(value)
-        t_Count[(ord(value) - ord("A"))] += 1
-    
-    if not checkIfHasSubstring(s_Count, t_Count):
+    if t == "": 
         return ""
+    countT, window = {}, {}
     
-    for value in validChars:
-        l = min(s.find(value), l)
-    for value in validChars:
-        r = max(s.rfind(value), r)
+    for c in t:
+        countT[c] = 1 + countT.get(c, 0)
 
-    while checkIfHasSubstring(s_Count, t_Count):
-        s_Count[(ord(s[r-1:r]) - ord("A"))] -= 1
-        r -= 1
-    r += 1
-    while checkIfHasSubstring(s_Count, t_Count):
-        s_Count[(ord(s[l:l+1]) - ord("A"))] -= 1
-        l += 1
-    print(l,r)
+    have,need = 0,len(countT)
+    res, resLength = [-1,-1], float("infinity")
+    l = 0
+    for r in range(len(s)):
+        c = s[r]
+        window[c] = 1 + window.get(c,0)
+        
+        if c in countT and window[c] == countT[c]:
+            have += 1
+        while have == need:
+            if (r-l+1) < resLength:
+                res = [l,r]
+                resLength = (r-l+1)
+
+            window[s[l]] -= 1
+            if s[l] in countT and window[s[l]] < countT[s[l]]:
+                have -= 1
+            l += 1
+    l,r = res
+    return s[l:r+1] if resLength != float("infinity") else ""
+
+ 
+        
+
+
     
-    # if s.count(s[l:l+1]) >= s.count(s[r:r-1]):
 
-print(minWindow("ADOBECODEBANC", "ABC"), "Was expecting BANC")
-# print(minWindow("a", "a"), "Was expecting a")
-# print(minWindow("a" , "aa"), "Was expecting a blank string")
+
+print(minWindow("ADOBECODEBANC", "ABC"), " Was expecting BANC")
+print(minWindow("a", "a"), " Was expecting a")
+print(minWindow("a" , "aa"), " Was expecting a blank string")
