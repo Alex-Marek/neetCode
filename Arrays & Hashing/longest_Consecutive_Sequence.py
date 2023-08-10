@@ -3,32 +3,30 @@
 
 # A consecutive numbers is just any number where if you subtract the previous number you will get 1
 # After sorting the numbers in ascending order, the solution is basically just make a loop to go through the list,
-# if the numbers are consecutive you add to a streak until they are no longer consecutive at which point you reset
-# the streak to 1 and start over again
-# At the end do a quick check to make sure the current streak isn't higher than the max one rn if it is just set maxStreak
-# Also an edge case needed to be handled where we were passed in a blank array
-# Additionally if the previous number and the current are the same that doesn't count toward the streak but doesn't end it
+# Every iteration should check if the current streak is the new maximum, if it is then set the resolution to it
+# if the numbers are consecutive you add to a streak until they are no longer consecutive
+# if they are no longer consecutive it means that the subtraction wasn't either 1 or 0 which means you can reset your streak
+
+# Updated to be more readable 364 ms (Beats 94% of users) / 30 mb (Beats 95% of users)
 
 def longestConsecutive(nums: list[int]) -> int:
-    if len(nums) == 0:
-        return 0
-    maxStreak = 0
-    streak = 0
+    if len(nums) == 0 or len(nums) == 1:
+        return len(nums)
+    
     nums.sort()
-    prevValue = nums[0] - 1
-    for value in nums:
-        if value - prevValue == 1:
-            streak += 1
-        elif value - prevValue == 0:
-            continue
-        else:
-            if streak > maxStreak:
-                maxStreak = streak
-            streak = 1
-        prevValue = value
-    if streak > maxStreak:
-        maxStreak = streak
-    return maxStreak
+    cur_Max = 1
+    res = 1
+
+    for idx, value in enumerate(nums):
+        cur_Dif = value - nums[idx-1]
+        if cur_Dif == 1:
+            cur_Max += 1
+        elif cur_Dif != 1 and cur_Dif != 0:
+            cur_Max = 1
+        
+        res = max(cur_Max, res)
+            
+    return res
 
 print(longestConsecutive([-8,-4,9,9,4,6,1,-4,-1,6,8]))
 print(longestConsecutive([1,2,0,1]))
