@@ -5,29 +5,23 @@
 # An easy way to find out if a word is a palindrome is just to divide it in two and compare the first half and the second half
 # If it has an even number of characters then you can compare direction, if it has an odd you have to ignore the middle char
 
+# Updated to be significantly more readable 39 ms (Beats 98.71% of users) / 17mb (Beats 25% of users)
 def isPalindrome(s: str) -> bool:
-    #Cleanup 
     s = ''.join(filter(str.isalnum, s))
     s = s.lower()
-    # Sanity Check
     if len(s) == 0:
         return True
+
+    w_Len = len(s) / 2
+    first_Half = s[:int(w_Len)][::-1]
     if len(s) % 2 == 0:
-        w_Len = len(s) / 2
-        first_Half = s[:int(w_Len)]
         second_Half = s[int(w_Len):]
-        if first_Half == second_Half[::-1]:
-            return True
-        else:
-            return False
     else:
-        w_Len = len(s) / 2
-        first_Half = s[:int(w_Len)]
         second_Half = s[int(w_Len)+1:]
-        if first_Half == second_Half[::-1]:
-            return True
-        else:
-            return False
+
+    if first_Half == second_Half:
+        return True
+    return False
     
 print(isPalindrome("a."))
 print(isPalindrome("abb"))
