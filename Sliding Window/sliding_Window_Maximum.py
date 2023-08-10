@@ -1,32 +1,28 @@
+# Works by using a deque which allows items to be inserted or removed from either end of the queue
+# If we aren't far enough in the list such that we've not seen k elements then it will repeatedly append the number that
+# cooresponds with the left-most position of the deque to the resolution because that is going to be the largest number
+# The deque is for storing indexes and will store the right-most index everytime
+# if the furthest right index number found is less than the new number coming in then it will remove the furthest right index
+# it will loop through this until the condition is no longer true, keeping the deque sorted
+# If the left-most index is greater than the right-index that was stored in the deque it means that we must remove the left
+# - most point because it is no longer in the window
+from collections import deque
 def maxSlidingWindow(nums: list[int], k: int) -> list[int]:
-    if k == 1:
-        return nums
     res = []
-    r = k
-
-    curWin = []
-    for value in nums[0:k]:
-        curWin.append(value)
-    curWin.sort(reverse=True)
-    res.append(curWin[0])
-    
+    q = deque()
+    l = r = 0
     while r < len(nums):
-        if nums[r] >= curWin[0]: 
-            curWin.insert(0,nums[r])
-        elif nums[r] < curWin[0]:   
-            for idx in range(len(curWin)-1):
-                if nums[r] == curWin[idx]:
-                    curWin.insert(idx, nums[r])
-                    break
-                if nums[r] < curWin[idx] and nums[r] > curWin[idx+1]:
-                    curWin.insert(idx+1, nums[r])
-                    break    
-            else:
-                curWin.append(nums[r])
-
-        curWin.remove(nums[r-k])
-        res.append(curWin[0])
         
+        while q and nums[q[-1]] < nums[r]:
+            q.pop()
+        q.append(r)
+
+        if l > q[0]:
+            q.popleft()
+        
+        if (r+1) >= k:
+            res.append(nums[q[0]])
+            l += 1
         r += 1
     
     return res
