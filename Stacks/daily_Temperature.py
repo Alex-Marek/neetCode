@@ -1,30 +1,17 @@
-# An interesting idea is everytime the next value isn't greater than the previous you add that number to a dict starting at 
-# if that dict isn't empty then whenever you add a new number you loop through all the previous numbers and if it's greater
-# than them increment their number by one
-from collections import defaultdict
+# Here a different idea have a stack that stores a pair. The pair will hold the temperature it's index
+# Then we while loop through that stack checking if the temperature is greater than the temperature from the most recently
+# stored temp on the stack then we can pop out that pair and add it to the resolution at it's original index with the value
+# of where we are in the for loop minus its index
+# everytime the for loop runs all the way through it should append onto the stack the temperature and the index 
+
 def dailyTemperatures(temperatures: list[int]) -> list[int]:
    stack = []
-   res = []
-   test = defaultdict(int)
-   for idx, value in enumerate(temperatures):
-      stack.append(value)
-      if value > stack[0]:
-         stack.pop()
-         res.append(len(stack))
-         if len(test) > 0:
-            for nums in test.keys():
-               if test[nums] > 0:
-                  res.append(test[nums])
-                  test.pop(nums)
-               elif test[nums] == 0:
-                  break
-      else:
-         test[value] += 1
-         if len(test) > 0:
-            for nums in test.keys():
-               if value > nums:
-                  test[nums] += 1
-
+   res = [0] * len(temperatures)
+   for idx, temp in enumerate(temperatures):
+      while stack and temp > stack[-1][0]:
+         sTemp, sIdx = stack.pop()
+         res[sIdx] = idx - sIdx
+      stack.append((temp,idx))
    return res
 
 print(dailyTemperatures([73,74,75,71,69,72,76,73]))
